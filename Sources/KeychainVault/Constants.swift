@@ -1,7 +1,7 @@
 //
- //  Constants.swift
- //  KeychainVault
- //
+//  Constants.swift
+//  KeychainVault
+//
 
 import Foundation
 
@@ -21,6 +21,7 @@ public enum KeychainConstant {
     case dataProtection
     case internetPassword
     case genericPassword
+    case protectionLevel
     
     public var keyName: String {
         switch self {
@@ -52,6 +53,8 @@ public enum KeychainConstant {
             return kSecClassInternetPassword.stringValue
         case .genericPassword:
             return kSecClassGenericPassword.stringValue
+        case .protectionLevel:
+            return kSecAttrAccessible.stringValue
         }
     }
 }

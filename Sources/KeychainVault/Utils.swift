@@ -23,3 +23,19 @@ public extension KeychainConstantDictionary {
         return query as CFDictionary
     }
 }
+
+public extension String {
+    var anyObject: AnyObject {
+        self as AnyObject
+    }
+}
+
+public extension Data {
+    var anyObject: AnyObject {
+        self as AnyObject
+    }
+    
+    var toString: String {
+        return String(data: self, encoding: .utf8) ?? ""
+    }
+}

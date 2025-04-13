@@ -6,15 +6,15 @@
 import Foundation
 
 open class KeychainVault {
-    /// KeyPrefix: Prefix used to append to the account id.
-    /// Such Prefix are best used when performing tests. Eg: test_account1_
+    /// KeyPrefix: Prefix used to prepend to the `key`
+    /// Such Prefixes are best used when performing tests. Eg: test_account1_
     private var keyPrefix: String
     
     /// AccessGroup: Unique access group ID
     /// Used to sync data among same ID devices
     private var accessGroup: String
     
-    /// Synchronizable: Bool which specifies if synchronizable data.
+    /// Synchronizable: Boolean which specifies if data is synchronizable data.
     /// When enabled all the keychains will be saved on the user's iCloud account.
     private var synchronizable: Bool
     
@@ -43,6 +43,8 @@ open class KeychainVault {
 }
 
 // MARK: Set Values
+/// What these functions will do is, if there's no data earlier in the KeyChain, they will add one.
+/// If any data is present in the specific category and key combination, it will update it.
 public extension KeychainVault {
     /// Store a `Bool` value
     func set(value: Bool, category: String, key: String) throws {
@@ -71,58 +73,27 @@ public extension KeychainVault {
         let data = try getData(for: category, with: keyName)
         return try JSONDecoder().decode(Bool.self, from: data)
     }
-
+    
     /// Retrieve a String value
     func getString(for category: String, with keyName: String) throws -> String {
         let data = try getData(for: category, with: keyName)
         return data.toString
     }
-
+    
     /// Retrieve any Codable object
-    func getObject<T: Codable>(
-        for category: String,
-        with keyName: String,
-        as type: T.Type
-    ) throws -> T {
+    func getObject<T: Codable>(for category: String, with keyName: String) throws -> T {
         let data = try getData(for: category, with: keyName)
         return try JSONDecoder().decode(T.self, from: data)
     }
 }
 
 public extension KeychainVault {
-    func update(
-        value: Data,
-        for category: String,
-        with keyName: String
-    ) throws {
-        let query: KeychainConstantDictionary = [
-            .classType : kSecClassGenericPassword,
-            .service   : category.anyObject,
-            .account   : (keyPrefix + keyName).anyObject
-        ]
-
-        var attributesToUpdate: KeychainConstantDictionary = [
-            .valueData      : value.anyObject,
-            .dataProtection : kCFBooleanTrue,
-            .protectionLevel: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly
-        ]
-
-        attributesToUpdate = addSyncIfRequired(
-            queryItems: attributesToUpdate,
-            isSynchronizable: synchronizable
-        )
-
-        let status = SecItemUpdate(query.cfDictionary, attributesToUpdate.cfDictionary)
-
-        guard status != errSecItemNotFound
-        else { throw KeychainError.itemNotFound }
-
-        guard status == errSecSuccess
-        else { throw KeychainError.unknown(status) }
-    }
-}
-
-public extension KeychainVault {
+    /// Deletes a keychain item for the given category and key.
+    ///
+    /// - Parameters:
+    ///   - category: The service/category under which the keychain item is stored.
+    ///   - keyName: The specific key identifying the item (appended to the keyPrefix).
+    /// - Throws: `KeychainError.unknown` if the deletion fails for an unknown reason.
     func delete(
         category: String,
         keyName: String
@@ -146,6 +117,13 @@ public extension KeychainVault {
 }
 
 private extension KeychainVault {
+    /// Saves or updates a keychain item with the given data.
+    ///
+    /// - Parameters:
+    ///   - value: The data to store in the keychain.
+    ///   - category: The service/category under which the keychain item is stored.
+    ///   - keyName: The specific key identifying the item (appended to the keyPrefix).
+    /// - Throws: A `KeychainError` if storing the data fails.
     func set(
         value: Data,
         for category: String,
@@ -158,6 +136,15 @@ private extension KeychainVault {
         }
     }
     
+    /// Adds a new item to the keychain. Fails if the item already exists.
+    ///
+    /// - Parameters:
+    ///   - value: The data to store in the keychain.
+    ///   - category: The service/category under which the keychain item is stored.
+    ///   - keyName: The specific key identifying the item (appended to the keyPrefix).
+    /// - Throws:
+    ///   - `KeychainError.duplicateEntry` if the item already exists.
+    ///   - `KeychainError.unknown` if another error occurs.
     func addItemToKeyChain(
         value: Data,
         for category: String,
@@ -211,6 +198,46 @@ private extension KeychainVault {
         else { throw KeychainError.noData }
         
         return parsedData
+    }
+    
+    /// Updates an existing keychain item with new data.
+    ///
+    /// - Parameters:
+    ///   - value: The new data to store.
+    ///   - category: The service/category under which the keychain item is stored.
+    ///   - keyName: The specific key identifying the item (appended to the keyPrefix).
+    /// - Throws:
+    ///   - `KeychainError.itemNotFound` if the item doesn’t exist.
+    ///   - `KeychainError.unknown` if the update fails for another reason.
+    func update(
+        value: Data,
+        for category: String,
+        with keyName: String
+    ) throws {
+        let query: KeychainConstantDictionary = [
+            .classType : kSecClassGenericPassword,
+            .service   : category.anyObject,
+            .account   : (keyPrefix + keyName).anyObject
+        ]
+        
+        var attributesToUpdate: KeychainConstantDictionary = [
+            .valueData      : value.anyObject,
+            .dataProtection : kCFBooleanTrue,
+            .protectionLevel: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly
+        ]
+        
+        attributesToUpdate = addSyncIfRequired(
+            queryItems: attributesToUpdate,
+            isSynchronizable: synchronizable
+        )
+        
+        let status = SecItemUpdate(query.cfDictionary, attributesToUpdate.cfDictionary)
+        
+        guard status != errSecItemNotFound
+        else { throw KeychainError.itemNotFound }
+        
+        guard status == errSecSuccess
+        else { throw KeychainError.unknown(status) }
     }
     
     /// Method to enable sync with iCloud

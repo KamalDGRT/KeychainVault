@@ -31,14 +31,14 @@ public extension KeychainConstantDictionary {
     }
 }
 
-public extension String {
+extension String {
     /// A convenience property to cast a `String` into `AnyObject`, used for Keychain dictionary values.
     var anyObject: AnyObject {
         self as AnyObject
     }
 }
 
-public extension Data {
+extension Data {
     /// A convenience property to cast `Data` into `AnyObject`, used for Keychain dictionary values.
     var anyObject: AnyObject {
         self as AnyObject

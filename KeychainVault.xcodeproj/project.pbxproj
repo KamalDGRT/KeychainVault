@@ -6,11 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		036504F42DAB5E460058EE63 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 036504F32DAB5E410058EE63 /* .gitignore */; };
-		036504FA2DAB5F2A0058EE63 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 036504F92DAB5F280058EE63 /* README.md */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		036504E92DAB5E020058EE63 /* KeychainVault.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KeychainVault.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		036504F32DAB5E410058EE63 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
@@ -131,7 +126,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				036504F42DAB5E460058EE63 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,7 +136,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				036504FA2DAB5F2A0058EE63 /* README.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

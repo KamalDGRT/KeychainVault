@@ -1,11 +1,11 @@
 //
-//  KeychainVault.swift
+//  KeychainHandler.swift
 //  KeychainVault
 //
 
 import Foundation
 
-open class KeychainVault {
+open class KeychainHandler {
     /// KeyPrefix: Prefix used to prepend to the `key`
     /// Such Prefixes are best used when performing tests. Eg: test_account1_
     private var keyPrefix: String
@@ -45,7 +45,7 @@ open class KeychainVault {
 // MARK: Set Values
 /// What these functions will do is, if there's no data earlier in the KeyChain, they will add one.
 /// If any data is present in the specific category and key combination, it will update it.
-public extension KeychainVault {
+public extension KeychainHandler {
     /// Store a `Bool` value
     func set(value: Bool, category: String, key: String) throws {
         let data = try JSONEncoder().encode(value)
@@ -67,7 +67,7 @@ public extension KeychainVault {
 }
 
 // MARK: Get Values
-public extension KeychainVault {
+public extension KeychainHandler {
     /// Retrieve a Bool value
     func getBool(for category: String, with keyName: String) throws -> Bool {
         let data = try getData(for: category, with: keyName)
@@ -87,7 +87,7 @@ public extension KeychainVault {
     }
 }
 
-public extension KeychainVault {
+public extension KeychainHandler {
     /// Deletes a keychain item for the given category and key.
     ///
     /// - Parameters:
@@ -116,7 +116,7 @@ public extension KeychainVault {
     }
 }
 
-private extension KeychainVault {
+private extension KeychainHandler {
     /// Saves or updates a keychain item with the given data.
     ///
     /// - Parameters:

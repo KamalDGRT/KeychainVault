@@ -19,9 +19,9 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		036504EB2DAB5E020058EE63 /* KeychainVault */ = {
+		036505102DAB61E10058EE63 /* Sources */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = KeychainVault;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -43,7 +43,7 @@
 				036504F32DAB5E410058EE63 /* .gitignore */,
 				036504F92DAB5F280058EE63 /* README.md */,
 				036504F52DAB5E630058EE63 /* Package.swift */,
-				036504EB2DAB5E020058EE63 /* KeychainVault */,
+				036505102DAB61E10058EE63 /* Sources */,
 				036504EA2DAB5E020058EE63 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -83,7 +83,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				036504EB2DAB5E020058EE63 /* KeychainVault */,
+				036505102DAB61E10058EE63 /* Sources */,
 			);
 			name = KeychainVault;
 			packageProductDependencies = (
